@@ -57,9 +57,9 @@ public class CompanyService : ICompanyService
         var company = await _repositoryManager.Company.GetCompanyAsync(companyId, trackChanges);
         if (company is null)
             throw new CompanyNotFoundException(companyId);
-        
+
         _repositoryManager.Company.DeleteCompany(company);
-        
+
         await _repositoryManager.SaveAsync();
     }
 
@@ -76,10 +76,10 @@ public class CompanyService : ICompanyService
             throw new IdParametersBadRequestException();
 
         var companies = await _repositoryManager.Company.GetCompaniesByIdsAsync(companyIds, trackChanges);
-        
+
         if (companies.Count() != companyIds.Count())
             throw new CollectionCountMismatchBadRequestException();
-        
+
         var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
 
         return companiesDto;
@@ -102,7 +102,7 @@ public class CompanyService : ICompanyService
             throw new CompanyNotFoundException(companyId);
 
         _mapper.Map(company, companyEntity);
-        
+
         await _repositoryManager.SaveAsync();
     }
 }

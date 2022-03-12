@@ -24,7 +24,7 @@ public class EmployeeService : IEmployeeService
         var company = await _repositoryManager.Company.GetCompanyAsync(companyId, trackChanges);
         if (company is null)
             throw new CompanyNotFoundException(companyId);
-        
+
         var employeeEntity = _mapper.Map<Employee>(employee);
         _repositoryManager.Employee.CreateEmployeeForCompany(companyId, employeeEntity);
         await _repositoryManager.SaveAsync();
@@ -39,13 +39,13 @@ public class EmployeeService : IEmployeeService
         if (company is null)
             throw new CompanyNotFoundException(companyId);
 
-        var employee = await _repositoryManager.Employee.GetEmployeeByIdAsync(companyId,  employeeId, trackChanges);
+        var employee = await _repositoryManager.Employee.GetEmployeeByIdAsync(companyId, employeeId, trackChanges);
         if (employee is null)
             throw new EmployeeNotFoundException(employeeId);
 
         _repositoryManager.Employee.DeleteEmployeeForCompany(employee);
         await _repositoryManager.SaveAsync();
-    } 
+    }
 
     public async Task<EmployeeDto?> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChanges)
     {
@@ -72,7 +72,7 @@ public class EmployeeService : IEmployeeService
         var employee = await _repositoryManager.Employee.GetEmployeeByIdAsync(companyId, employeeId, empTrackChanges);
         if (employee is null)
             throw new EmployeeNotFoundException(employeeId);
-        
+
         var employeeToPatch = _mapper.Map<EmployeeForUpdateDto>(employee);
 
         return (employeeToPatch, employee);
