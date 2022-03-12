@@ -21,12 +21,12 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     public void DeleteEmployeeForCompany(Employee employee) =>
         Delete(employee);
 
-    public Employee? GetEmployeeById(Guid companyId, Guid employeeId, bool trackChanges) =>
-        FindByCondition(e => e.CompanyId == companyId && e.Id == employeeId, trackChanges)
-            .SingleOrDefault();
+    public async Task<Employee?> GetEmployeeByIdAsync(Guid companyId, Guid employeeId, bool trackChanges) =>
+        await FindByCondition(e => e.CompanyId == companyId && e.Id == employeeId, trackChanges)
+            .SingleOrDefaultAsync();
 
-    public IEnumerable<Employee> GetEmployees(Guid companyId, bool trackChanges) =>
-        FindByCondition(e => e.CompanyId == companyId, trackChanges)
+    public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId, bool trackChanges) =>
+        await FindByCondition(e => e.CompanyId == companyId, trackChanges)
             .OrderBy(e => e.Name)
-            .ToList();
+            .ToListAsync();
 }
