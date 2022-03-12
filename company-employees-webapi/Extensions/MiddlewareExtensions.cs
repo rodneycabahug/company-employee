@@ -32,7 +32,7 @@ public static class MiddlewareExtensions
                         {
                             StatusCode = context.Response.StatusCode,
                             Message = contextFeature.Error.Message,
-                            
+
                         }.ToString()
                     );
                 }

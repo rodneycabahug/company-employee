@@ -4,7 +4,7 @@ using company_employees_shared.DataTransferObjects;
 
 namespace company_employees_webapi.MappingProfile;
 
-public class MappingProfile: Profile
+public class MappingProfile : Profile
 {
     public MappingProfile()
     {

@@ -8,7 +8,7 @@ namespace company_employees_repositories;
 
 public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
 {
-    public CompanyRepository(RepositoryContext repositoryContext) : base(repositoryContext) {}
+    public CompanyRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
 
     public void CreateCompany(Company company) => Create(company);
 

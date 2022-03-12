@@ -16,7 +16,7 @@ public class ArrayModelBinder : IModelBinder
         var providedValue = bindingContext.ValueProvider
             .GetValue(bindingContext.ModelName)
             .ToString();
-        
+
         if (string.IsNullOrEmpty(providedValue))
         {
             bindingContext.Result = ModelBindingResult.Success(null);

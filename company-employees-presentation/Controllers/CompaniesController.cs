@@ -35,7 +35,7 @@ public class CompaniesController : ControllerBase
     {
         if (company is null)
             return BadRequest("CompanyForCreationDto object is null");
-        
+
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
@@ -46,7 +46,7 @@ public class CompaniesController : ControllerBase
 
     [HttpGet("collection/({companyIds})", Name = nameof(GetCompaniesByIdsAsync))]
     public async Task<IActionResult> GetCompaniesByIdsAsync(
-        [ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> companyIds)
+        [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> companyIds)
     {
         var companiesDto = await _serviceManager.CompanyService.GetCompaniesByIdsAsync(companyIds, trackChanges: false);
         return Ok(companiesDto);
@@ -79,7 +79,7 @@ public class CompaniesController : ControllerBase
             return UnprocessableEntity(ModelState);
 
         await _serviceManager.CompanyService.UpdateCompanyAsync(companyId, company, trackChanges: true);
-        
+
         return NoContent();
     }
 }

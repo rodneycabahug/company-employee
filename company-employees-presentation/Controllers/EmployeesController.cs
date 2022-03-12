@@ -56,15 +56,15 @@ public class EmployeesController : ControllerBase
     {
         if (employee is null)
             return BadRequest("EmployeeForUpdateDto object is null");
-        
+
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
-        
+
         await _serviceManager.EmployeeService.UpdateEmployeeForCompanyAsync(companyId, employeeId, employee, comTrackChanges: false, empTrackChanges: true);
 
         return NoContent();
     }
-    
+
     [HttpPatch("{employeeId:guid}")]
     public async Task<IActionResult> PartiallyUpdateEmployeeForCompanyAsync(Guid companyId, Guid employeeId, [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
     {
@@ -76,7 +76,7 @@ public class EmployeesController : ControllerBase
         patchDoc.ApplyTo(result.employeeToPatch, ModelState);
 
         TryValidateModel(result.employeeToPatch);
-        
+
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 

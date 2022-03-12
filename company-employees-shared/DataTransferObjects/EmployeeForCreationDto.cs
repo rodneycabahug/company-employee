@@ -2,4 +2,4 @@
 
 namespace company_employees_shared.DataTransferObjects;
 
-public record EmployeeForCreationDto: EmployeeForManipulationDto;
+public record EmployeeForCreationDto : EmployeeForManipulationDto;
