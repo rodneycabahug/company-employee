@@ -2,6 +2,7 @@ using company_employees_service_contracts;
 using company_employees_shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using company_employees_presentation.ModelBinders;
+using company_employees_presentation.ActionFilters;
 
 namespace company_employees_presentation.Controllers;
 
@@ -31,14 +32,9 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateCompanyAsync([FromBody] CompanyForCreationDto company)
     {
-        if (company is null)
-            return BadRequest("CompanyForCreationDto object is null");
-
-        if (!ModelState.IsValid)
-            return UnprocessableEntity(ModelState);
-
         var createdCompany = await _serviceManager.CompanyService.CreateCompanyAsync(company);
 
         return CreatedAtRoute(nameof(GetCompanyAsync), new { id = createdCompany.Id }, createdCompany);
@@ -53,11 +49,9 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost("collection")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateCompaniesAsync([FromBody] IEnumerable<CompanyForCreationDto> companies)
     {
-        if (!ModelState.IsValid)
-            return UnprocessableEntity(ModelState);
-
         var result = await _serviceManager.CompanyService.CreateCompaniesAsync(companies);
         return CreatedAtRoute(nameof(GetCompaniesByIdsAsync), new { companyIds = result.companyIds }, result.companies);
     }
@@ -70,14 +64,9 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPut("{companyId:guid}")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdateCompanyAsync(Guid companyId, CompanyForUpdateDto company)
     {
-        if (company is null)
-            return BadRequest("CompanyForUpdateDto object is null");
-
-        if (!ModelState.IsValid)
-            return UnprocessableEntity(ModelState);
-
         await _serviceManager.CompanyService.UpdateCompanyAsync(companyId, company, trackChanges: true);
 
         return NoContent();
