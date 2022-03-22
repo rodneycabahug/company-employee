@@ -1,6 +1,8 @@
+using System.Text.Json;
 using company_employees_presentation.ActionFilters;
 using company_employees_service_contracts;
 using company_employees_shared.DataTransferObjects;
+using company_employees_shared.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +20,15 @@ public class EmployeesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetEmployeesForCompanyAsync(Guid companyId)
+    public async Task<IActionResult> GetEmployeesForCompanyAsync(
+        Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
     {
-        var companies = await _serviceManager.EmployeeService.GetEmployeesAsync(companyId, trackChanges: false);
-        return Ok(companies);
+        var pagedResult = await _serviceManager.EmployeeService.GetEmployeesAsync(
+            companyId, employeeParameters, trackChanges: false);
+
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metadata));
+
+        return Ok(pagedResult.employees);
     }
 
     [HttpGet("{employeeId:guid}", Name = nameof(GetEmployeeForCompanyAsync))]

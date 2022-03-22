@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\company-employees-entities\company-employees-entities.csproj" />
     <ProjectReference Include="..\company-employees-contracts\company-employees-contracts.csproj" />
+    <ProjectReference Include="..\company-employees-shared\company-employees-shared.csproj" />
   </ItemGroup>
 
 </Project>

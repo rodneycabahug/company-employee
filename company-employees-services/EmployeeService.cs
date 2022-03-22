@@ -4,6 +4,7 @@ using company_employees_entities.Exceptions;
 using company_employees_entities.Models;
 using company_employees_service_contracts;
 using company_employees_shared.DataTransferObjects;
+using company_employees_shared.RequestFeatures;
 
 namespace company_employees_services;
 public class EmployeeService : IEmployeeService
@@ -64,14 +65,15 @@ public class EmployeeService : IEmployeeService
         return (employeeToPatch, employee);
     }
 
-    public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges)
+    public async Task<(IEnumerable<EmployeeDto> employees, Metadata metadata)> GetEmployeesAsync(
+        Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
     {
         await CheckIfCompanyExistsAsync(companyId, trackChanges);
 
-        var employees = await _repositoryManager.Employee.GetEmployeesAsync(companyId, trackChanges);
-        var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        var employeesWithMetadata = await _repositoryManager.Employee.GetEmployeesAsync(companyId, employeeParameters, trackChanges);
+        var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesWithMetadata);
 
-        return employeesDto;
+        return (employees: employeesDto, metadata: employeesWithMetadata.Metadata);
     }
 
     public async Task SaveChangesForPatchAsync(EmployeeForUpdateDto employeToPatch, Employee employee)
