@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using company_employees_contracts;
 using company_employees_entities.Models;
 using company_employees_shared.RequestFeatures;
+using company_employees_repositories.Extensions;
 
 namespace company_employees_repositories;
 
@@ -29,10 +30,9 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     public async Task<PagedList<Employee>> GetEmployeesAsync(
         Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
     {
-        var employees = await FindByCondition(e =>
-            e.CompanyId == companyId
-            && (e.Age >= employeeParameters.MinAge && e.Age <= employeeParameters.MaxAge),
-            trackChanges)
+        var employees = await FindByCondition(e => e.CompanyId == companyId, trackChanges)
+            .Filter(employeeParameters.MinAge, employeeParameters.MaxAge)
+            .Search(employeeParameters.SearchTerm)
             .OrderBy(e => e.Name)
             .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
             .Take(employeeParameters.PageSize)
